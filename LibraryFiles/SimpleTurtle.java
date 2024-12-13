@@ -29,6 +29,9 @@ public class SimpleTurtle
   
   /** array of colors to use for the turtles */
   private static Color[] colorArray = { Color.green, Color.cyan, new Color(204,0,204), Color.gray};
+
+  /** milliseconds it takes for the turtle to complete a movement */
+  private int speed = 0;
   
   /** who to notify about changes to this turtle */
   private ModelDisplay modelDisplay = null;
@@ -88,6 +91,23 @@ public class SimpleTurtle
     setPenColor(bodyColor);
     numTurtles++;
   }
+
+  /**
+   * Constructor that takes the x and y position and the
+   * speed the turtle should move
+   * @param x the x pos
+   * @param y the y pos
+   * @param speed the milliseconds it takes for the turtle to move
+   */
+  public SimpleTurtle(int x, int y, int speed)
+  {
+    xPos = x;
+    yPos = y;
+    this.speed = speed;
+    bodyColor = colorArray[numTurtles % colorArray.length];
+    setPenColor(bodyColor);
+    numTurtles++;
+  }
   
   /**
    * Constructor that takes the x and y position and the
@@ -99,6 +119,21 @@ public class SimpleTurtle
   public SimpleTurtle(int x, int y, ModelDisplay display)
   {
     this(x,y); // invoke constructor that takes x and y
+    modelDisplay = display;
+    display.addModel(this);
+  }
+
+  /**
+   * Constructor that takes the x and y position, the
+   * model displayer, and the speed of the turtle
+   * @param x the x pos
+   * @param y the y pos
+   * @param speed the milliseconds it takes for the turtle to move
+   * @param display the model display
+   */
+  public SimpleTurtle(int x, int y, ModelDisplay display, int speed)
+  {
+    this(x,y,speed); // invoke constructor that takes x, y, and speed
     modelDisplay = display;
     display.addModel(this);
   }
@@ -115,7 +150,22 @@ public class SimpleTurtle
          (int) (display.getHeight() / 2));
     modelDisplay = display;
     display.addModel(this);
+  }
 
+  /**
+   * Constructor that takes a model display and adds
+   * a turtle in the middle of it at a specified speed
+   * @param display the model display
+   * @param speed the milliseconds it takes for the turtle to move
+   */
+  public SimpleTurtle(ModelDisplay display, int speed)
+  {
+    // invoke constructor that takes x and y
+    this((int) (display.getWidth() / 2), 
+         (int) (display.getHeight() / 2),
+         speed);
+    modelDisplay = display;
+    display.addModel(this);
   }
   
   /**
@@ -128,6 +178,21 @@ public class SimpleTurtle
   public SimpleTurtle(int x, int y, Picture picture)
   {
     this(x,y); // invoke constructor that takes x and y
+    this.picture = picture;
+    this.visible = false; // default is not to see the turtle
+  }
+
+  /**
+   * Constructor that takes the x and y position and the
+   * picture to draw on
+   * @param x the x pos
+   * @param y the y pos
+   * @param speed the milliseconds it takes for the turtle to move
+   * @param picture the picture to draw on
+   */
+  public SimpleTurtle(int x, int y, Picture picture, int speed)
+  {
+    this(x,y,speed); // invoke constructor that takes x, y, and speed
     this.picture = picture;
     this.visible = false; // default is not to see the turtle
   }
@@ -149,6 +214,21 @@ public class SimpleTurtle
   //////////////////// methods /////////////////////////
   
   /**
+   * Method to get the speed simple turtle moves
+   * @return an int of speed in milliseconds
+   */
+  public int getSpeed() { return this.speed; }
+
+  /**
+   * Set the speed the turtle moves in milliseconds
+   * @param speed the milliseconds it takes to complete a move
+   */
+  public void setSpeed(int speed)
+  {
+    this.speed = speed;
+  }
+
+  /**
    * Get the distance from the passed x and y location
    * @param x the x location
    * @param y the y location
@@ -165,6 +245,7 @@ public class SimpleTurtle
    */
   public void turnToFace(SimpleTurtle turtle)
   {
+    try{Thread.sleep(this.speed);}catch(InterruptedException e){}
     turnToFace(turtle.xPos,turtle.yPos);
   }
   
@@ -202,6 +283,7 @@ public class SimpleTurtle
     }
     
     // notify the display that we need to repaint
+    try{Thread.sleep(this.speed);}catch(InterruptedException e){}
     updateDisplay();
   }
   
@@ -283,7 +365,7 @@ public class SimpleTurtle
    * This will set the body color
    * @param color the color to use
    */
-  public void setColor(Color color) { this.setBodyColor(color); }
+  public void setColor(Color color) { try{Thread.sleep(this.speed);}catch(InterruptedException e){} this.setBodyColor(color); }
   
   /**
    * Method to get the information color 
@@ -313,13 +395,13 @@ public class SimpleTurtle
    * Method to set the width of this object
    * @param theWidth in width in pixels
    */
-  public void setWidth(int theWidth) { this.width = theWidth; }
+  public void setWidth(int theWidth) { try{Thread.sleep(this.speed);}catch(InterruptedException e){} this.width = theWidth; }
   
   /**
    * Method to set the height of this object
    * @param theHeight the height in pixels
    */
-  public void setHeight(int theHeight) { this.height = theHeight; }
+  public void setHeight(int theHeight) { try{Thread.sleep(this.speed);}catch(InterruptedException e){} this.height = theHeight; }
   
   /**
    * Method to get the current x position
@@ -412,6 +494,7 @@ public class SimpleTurtle
    */
   public void setHeading(double heading) 
   { 
+    try{Thread.sleep(this.speed);}catch(InterruptedException e){}
     this.heading = heading; 
   }
   
@@ -440,13 +523,13 @@ public class SimpleTurtle
    * Method to hide the turtle (stop showing it)
    * This doesn't affect the pen status
    */
-  public void hide() { this.setVisible(false); }
+  public void hide() { try{Thread.sleep(this.speed);}catch(InterruptedException e){} this.setVisible(false); }
   
   /**
    * Method to show the turtle (doesn't affect
    * the pen status
    */
-  public void show() { this.setVisible(true); }
+  public void show() { try{Thread.sleep(this.speed);}catch(InterruptedException e){} this.setVisible(true); }
   
   /**
    * Method to set the visible flag 
@@ -463,6 +546,7 @@ public class SimpleTurtle
     
     // set the visibile flag to the passed value
     this.visible = value;
+    try{Thread.sleep(this.speed);}catch(InterruptedException e){}
   }
   
   /**
@@ -500,7 +584,7 @@ public class SimpleTurtle
   /**
    * Method to move the turtle foward 100 pixels
    */
-  public void forward() { forward(100); }
+  public void forward() { try{Thread.sleep(this.speed);}catch(InterruptedException e){} forward(100); }
   
   /**
    * Method to move the turtle forward the given number of pixels 
@@ -508,6 +592,7 @@ public class SimpleTurtle
    */
   public void forward(int pixels)
   {
+    try{Thread.sleep(this.speed);}catch(InterruptedException e){}
     int oldX = xPos;
     int oldY = yPos;
     
@@ -527,6 +612,7 @@ public class SimpleTurtle
    */
   public void backward()
   {
+    try{Thread.sleep(this.speed);}catch(InterruptedException e){}
     backward(100);
   }
   
@@ -536,6 +622,7 @@ public class SimpleTurtle
    */
   public void backward(int pixels)
   {
+    try{Thread.sleep(this.speed);}catch(InterruptedException e){}
     forward(-pixels);
   }
   
@@ -546,6 +633,7 @@ public class SimpleTurtle
    */
   public void moveTo(int x, int y)
   {
+    try{Thread.sleep(this.speed);}catch(InterruptedException e){}
     this.pen.addMove(xPos,yPos,x,y);
     this.xPos = x;
     this.yPos = y;
@@ -557,7 +645,8 @@ public class SimpleTurtle
    */
   public void turnLeft()
   {
-   this.turn(-90);
+    try{Thread.sleep(this.speed);}catch(InterruptedException e){}
+    this.turn(-90);
   }
   
   /**
@@ -565,6 +654,7 @@ public class SimpleTurtle
    */
   public void turnRight()
   {
+    try{Thread.sleep(this.speed);}catch(InterruptedException e){}
     this.turn(90);
   }
   
@@ -575,6 +665,7 @@ public class SimpleTurtle
    */
   public void turn(double degrees) 
   {
+    try{Thread.sleep(this.speed);}catch(InterruptedException e){}
     this.heading = (heading + degrees) % 360;
     this.updateDisplay();
   }
@@ -597,7 +688,8 @@ public class SimpleTurtle
     // if g2 isn't null
     if (g2 != null)
     {
-      
+      try{Thread.sleep(this.speed);}catch(InterruptedException e){}
+
       // save the current tranform
       AffineTransform oldTransform = g2.getTransform();
       
@@ -682,6 +774,7 @@ public class SimpleTurtle
    */
   public synchronized void drawInfoString(Graphics g) 
   {
+    try{Thread.sleep(this.speed);}catch(InterruptedException e){}
     g.setColor(infoColor);
     g.drawString(this.toString(),xPos + (int) (width/2),yPos);
   }

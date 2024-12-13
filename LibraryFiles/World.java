@@ -98,6 +98,9 @@ public class World extends JComponent implements ModelDisplay
     
     // show this world
     frame.setVisible(visibleFlag);
+
+    // close button kills program
+    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
   }
   
   /** 
@@ -213,18 +216,20 @@ public class World extends JComponent implements ModelDisplay
   /**
    * Method to hide the frame
    */
-//  public void hide() 
-//  {
-//    frame.setVisible(false);
-//  }
+   @SuppressWarnings( "deprecation" )
+  public void hide() 
+  {
+    frame.setVisible(false);
+  }
   
   /**
    * Method to show the frame
    */
-//  public void show()
-//  {
-//    frame.setVisible(true);
-//  }
+   @SuppressWarnings( "deprecation" )
+  public void show(boolean value)
+  {
+    frame.setVisible(value);
+  }
   
   /**
    * Method to set the visibility of the world 
